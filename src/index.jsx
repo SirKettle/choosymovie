@@ -1,4 +1,5 @@
 import '@babel/polyfill';
+import 'sanitize.css/sanitize.css';
 import * as React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import { Provider } from 'react-redux';

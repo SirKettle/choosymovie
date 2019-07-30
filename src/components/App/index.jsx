@@ -6,6 +6,7 @@ import { actions as configActions } from 'state/domain/config/action';
 import * as configSelectors from 'state/domain/config/selector';
 import { Copy, Heading, Headline, Paragraph, Quote, SmallPrint } from '../typography';
 import { Loading } from '../Loading';
+import { LOADING_STATUS } from '../../state/loadingStatus';
 
 const GlobalStyle = createGlobalStyle`
   body {
