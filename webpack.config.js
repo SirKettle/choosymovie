@@ -2,6 +2,8 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
 const webpack = require('webpack');
 const pkg = require(path.resolve(process.cwd(), 'package.json'));
+const GenerateJsonPlugin = require('generate-json-webpack-plugin');
+const R = require('ramda');
 
 module.exports = {
   mode: 'development',
@@ -29,9 +31,9 @@ module.exports = {
         exclude: /node_modules/,
         use: {
           loader: 'babel-loader',
-          options: {
-            presets: ['env', 'es2015', 'react', 'stage-1'],
-          },
+          // options: {
+          //   presets: ['env', 'es2015', 'react', 'stage-1'],
+          // },
         },
       },
       {
@@ -57,5 +59,16 @@ module.exports = {
         BUILD_VERSION: JSON.stringify(pkg.version),
       },
     }),
+    new GenerateJsonPlugin(
+      'config.json',
+      Object.assign(R.pick(['name', 'description', 'version', 'author'], pkg), {
+        repository: pkg.repository.url,
+        bundledAt: new Date().toUTCString(),
+      }),
+    ),
+    // name: pkg.name,
+    // desciption: pkg.description,
+    // buildVersion: pkg.version,
+    // author: pkg.author,
   ],
 };

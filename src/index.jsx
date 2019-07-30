@@ -1,28 +1,29 @@
+import '@babel/polyfill';
 import * as React from 'react';
-import * as ReactDOM from 'react-dom';
+import { render, unmountComponentAtNode } from 'react-dom';
+import { Provider } from 'react-redux';
 import { App } from 'components/App';
+import { configureStore } from './state/configureStore';
 
 const mountNode = document.getElementById('app');
 
-const render = (isHot = false) => {
-  ReactDOM.render(
-    <div>
+const renderApp = (isHot = false) => {
+  const store = configureStore();
+  render(
+    <Provider store={store}>
       <App isHot={isHot} />
-    </div>,
+    </Provider>,
     mountNode,
   );
+
+  console.log(`“Choosy Movie” by Will Thirkettle - v${process.env.BUILD_VERSION} - ${process.env.NODE_ENV}`);
 };
 
-console.log(`“Choosy Movie” by Will Thirkettle - v${process.env.BUILD_VERSION} - ${process.env.NODE_ENV}`);
+if (process.env.NODE_ENV !== 'production' && module.hot) {
+  module.hot.accept('components/App', () => {
+    unmountComponentAtNode(mountNode);
+    renderApp();
+  });
+}
 
-// if (module.hot) {
-//   // Hot reloadable React components and translation json files
-//   // modules.hot.accept does not accept dynamic dependencies,
-//   // have to be constants at compile-time
-//   // module.hot.accept(['components/App'], () => {
-//   //   ReactDOM.unmountComponentAtNode(mountNode);
-//   //   render(true);
-//   // });
-// }
-
-render();
+renderApp();
